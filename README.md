@@ -1,4 +1,4 @@
-# stylelint-formatter-sonarqube
+# @scalvert/stylelint-formatter-sonarqube
 
 ![CI Build](https://github.com/scalvert/stylelint-formatter-sonarqube/workflows/CI%20Build/badge.svg)
 [![npm version](https://badge.fury.io/js/%40scalvert%2Fstylelint-formatter-sonarqube.svg)](https://badge.fury.io/js/%40scalvert%2Fstylelint-formatter-sonarqube)
