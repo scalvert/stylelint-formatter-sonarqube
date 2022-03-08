@@ -12,11 +12,11 @@
 ## Install
 
 ```shell
-npm i stylelint-formatter-sonarqube --save-dev
+npm i @scalvert/stylelint-formatter-sonarqube --save-dev
 
 # or
 
-yarn add stylelint-formatter-sonarqube --dev
+yarn add @scalvert/stylelint-formatter-sonarqube --dev
 ```
 
 Output will be in 'Generic Issue Format'.
@@ -59,5 +59,5 @@ Output will be in 'Generic Issue Format'.
 ## Usage
 
 ```shell
-stylelint "**/*.css" --custom-formater node_modules/stylelint-formatter-sonarqube
+stylelint "**/*.css" --custom-formater node_modules/@scalvert/stylelint-formatter-sonarqube
 ```
