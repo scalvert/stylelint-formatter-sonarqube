@@ -1,6 +1,7 @@
 import { describe, beforeEach, afterEach, it, expect } from 'vitest';
 import execa from 'execa';
 import Project from './utils/fake-project';
+import { fileURLToPath } from 'node:url';
 
 describe('SonarQube Formatter', () => {
   let project;
@@ -101,10 +102,10 @@ describe('SonarQube Formatter', () => {
     return execa(
       process.execPath,
       [
-        require.resolve('../node_modules/stylelint/bin/stylelint.js'),
+        fileURLToPath(new URL('../node_modules/stylelint/bin/stylelint.js', import.meta.url)),
         '**/*.css',
         '--custom-formatter',
-        require.resolve('..'),
+        fileURLToPath(new URL('..', import.meta.url)),
         ...argumentsOrOptions,
       ],
       {
