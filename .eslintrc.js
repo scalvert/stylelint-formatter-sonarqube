@@ -9,7 +9,7 @@ module.exports = {
   ],
   parserOptions: {
     ecmaVersion: 2018,
-    sourceType: 'script',
+    sourceType: 'module',
     requireConfigFile: false,
   },
   env: {

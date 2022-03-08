@@ -1,5 +1,6 @@
-const execa = require('execa');
-const Project = require('./__utils__/fake-project');
+import { describe, beforeEach, afterEach, it, expect } from 'vitest';
+import execa from 'execa';
+import Project from './utils/fake-project';
 
 describe('SonarQube Formatter', () => {
   let project;

@@ -1,8 +1,10 @@
 'use strict';
 
-const path = require('path');
-const Project = require('fixturify-project');
+import path from 'node:path';
+import { createRequire } from 'node:module';
+import Project from 'fixturify-project';
 
+const require = createRequire(import.meta.url);
 const ROOT = process.cwd();
 
 // this is the default .editorconfig file for new ember-cli apps, taken from:
@@ -37,7 +39,7 @@ const DEFAULT_STYLELINTRC = `
 }
 `;
 
-module.exports = class FakeProject extends Project {
+export default class FakeProject extends Project {
   static defaultSetup() {
     let project = new this();
 
