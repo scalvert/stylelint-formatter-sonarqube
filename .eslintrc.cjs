@@ -22,9 +22,17 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['__tests__/**/*.js'],
+      files: ['tests/**/*.js'],
       env: {
         jest: true,
+      },
+      rules: {
+        'node/no-missing-import': [
+          'error',
+          {
+            allowModules: ['@scalvert/cli-test-harness'],
+          },
+        ],
       },
     },
   ],
