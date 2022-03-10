@@ -27,8 +27,7 @@
   },
   "files": [
     "index.cjs",
-    "index.js",
-    "package.json"
+    "index.js"
   ],
   "scripts": {
     "lint": "eslint .",
