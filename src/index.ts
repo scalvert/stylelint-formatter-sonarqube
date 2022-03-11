@@ -1,12 +1,16 @@
 import path from 'path';
-import stylelint from 'stylelint';
+import stylelint, { Severity } from 'stylelint';
 
-const SONARQUBE_SEVERITY: Record<string, string> = {
+type PartialRecord<K extends keyof any, T> = {
+  [P in K]: T;
+};
+
+const SONARQUBE_SEVERITY: PartialRecord<Severity, string> = {
   warning: 'MINOR',
   error: 'CRITICAL',
 };
 
-const SONARQUBE_TYPE: Record<string, string> = {
+const SONARQUBE_TYPE: PartialRecord<Severity, string> = {
   warning: 'CODE_SMELL',
   error: 'BUG',
 };
