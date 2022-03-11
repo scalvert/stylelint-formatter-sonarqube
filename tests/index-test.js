@@ -1,17 +1,22 @@
-import { describe, beforeEach, afterEach, it, expect } from 'vitest';
-import execa from 'execa';
-import Project from './utils/fake-project';
 import { fileURLToPath } from 'node:url';
+import { describe, beforeEach, afterEach, it, expect } from 'vitest';
+import { createBinTester } from '@scalvert/bin-tester';
+import Project from './utils/fake-project';
 
 describe('SonarQube Formatter', () => {
   let project;
+  let { setupProject, teardownProject, runBin } = createBinTester({
+    binPath: fileURLToPath(new URL('../node_modules/stylelint/bin/stylelint.js', import.meta.url)),
+    staticArgs: ['**/*.css', '--custom-formatter', fileURLToPath(new URL('..', import.meta.url))],
+    projectConstructor: Project,
+  });
 
-  beforeEach(() => {
-    project = new Project('fake-project');
+  beforeEach(async () => {
+    project = await setupProject('fake-project');
   });
 
   afterEach(() => {
-    project.dispose();
+    teardownProject();
   });
 
   it('can format output from no results', async () => {
@@ -26,7 +31,7 @@ describe('SonarQube Formatter', () => {
       },
     });
 
-    let result = await styleLint();
+    let result = await runBin();
 
     expect(result.stdout).toMatchInlineSnapshot(`
       "{
@@ -50,7 +55,7 @@ describe('SonarQube Formatter', () => {
       },
     });
 
-    let result = await styleLint();
+    let result = await runBin();
 
     expect(result.stdout).toMatchInlineSnapshot(`
       "{
@@ -88,31 +93,4 @@ describe('SonarQube Formatter', () => {
     `);
     expect(result.exitCode).not.toEqual(0);
   });
-
-  function styleLint(argumentsOrOptions, options) {
-    if (arguments.length > 0) {
-      if (arguments.length === 1) {
-        options = Array.isArray(argumentsOrOptions) ? {} : argumentsOrOptions;
-      }
-    } else {
-      argumentsOrOptions = [];
-      options = {};
-    }
-
-    return execa(
-      process.execPath,
-      [
-        fileURLToPath(new URL('../node_modules/stylelint/bin/stylelint.js', import.meta.url)),
-        '**/*.css',
-        '--custom-formatter',
-        fileURLToPath(new URL('..', import.meta.url)),
-        ...argumentsOrOptions,
-      ],
-      {
-        reject: false,
-        cwd: project.baseDir,
-        ...options,
-      }
-    );
-  }
 });
