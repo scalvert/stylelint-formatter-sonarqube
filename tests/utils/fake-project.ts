@@ -1,11 +1,10 @@
 'use strict';
 
-import path from 'node:path';
+import { join } from 'node:path';
 import { createRequire } from 'node:module';
-import Project from 'fixturify-project';
+import { BinTesterProject } from '@scalvert/bin-tester';
 
 const require = createRequire(import.meta.url);
-const ROOT = process.cwd();
 
 // this is the default .editorconfig file for new ember-cli apps, taken from:
 // https://github.com/ember-cli/ember-new-output/blob/stable/.editorconfig
@@ -39,7 +38,7 @@ const DEFAULT_STYLELINTRC = `
 }
 `;
 
-export default class FakeProject extends Project {
+export default class FakeProject extends BinTesterProject {
   static defaultSetup() {
     let project = new this();
 
@@ -51,11 +50,11 @@ export default class FakeProject extends Project {
     return project;
   }
 
-  constructor(name = 'fake-project', ...arguments_) {
+  constructor(name = 'fake-project', ...arguments_: any[]) {
     super(name, ...arguments_);
   }
 
-  setConfig(config) {
+  async setConfig(config: Record<string, any>) {
     let configFileContents =
       config === undefined
         ? DEFAULT_STYLELINTRC
@@ -64,43 +63,20 @@ export default class FakeProject extends Project {
 
     this.files['.stylelintrc.json'] = configFileContents;
 
-    this.writeSync();
+    await this.write();
   }
 
-  getConfig() {
-    return require(path.join(this.baseDir, '.stylelintrc.json'));
+  get config() {
+    return require(join(this.baseDir, '.stylelintrc.json'));
   }
 
-  setEditorConfig(value = DEFAULT_EDITOR_CONFIG) {
+  async setEditorConfig(value = DEFAULT_EDITOR_CONFIG) {
     this.files['.editorconfig'] = value;
 
-    this.writeSync();
+    await this.write();
   }
 
-  path(subPath) {
-    return subPath ? path.join(this.baseDir, subPath) : this.baseDir;
-  }
-
-  // eslint-disable-next-line unicorn/prevent-abbreviations
-  write(dirJSON) {
-    Object.assign(this.files, dirJSON);
-    this.writeSync();
-  }
-
-  chdir() {
-    this._dirChanged = true;
-
-    // ensure the directory structure is created initially
-    this.writeSync();
-
-    process.chdir(this.baseDir);
-  }
-
-  dispose() {
-    if (this._dirChanged) {
-      process.chdir(ROOT);
-    }
-
-    return super.dispose();
+  path(subPath: string) {
+    return subPath ? join(this.baseDir, subPath) : this.baseDir;
   }
 }

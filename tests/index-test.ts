@@ -4,15 +4,19 @@ import { createBinTester } from '@scalvert/bin-tester';
 import Project from './utils/fake-project';
 
 describe('SonarQube Formatter', () => {
-  let project;
+  let project: Project;
   let { setupProject, teardownProject, runBin } = createBinTester({
     binPath: fileURLToPath(new URL('../node_modules/stylelint/bin/stylelint.js', import.meta.url)),
-    staticArgs: ['**/*.css', '--custom-formatter', fileURLToPath(new URL('..', import.meta.url))],
+    staticArgs: [
+      '**/*.css',
+      '--custom-formatter',
+      fileURLToPath(new URL('../dist/index.cjs', import.meta.url)),
+    ],
     projectConstructor: Project,
   });
 
   beforeEach(async () => {
-    project = await setupProject('fake-project');
+    project = (await setupProject()) as Project;
   });
 
   afterEach(() => {
@@ -20,12 +24,12 @@ describe('SonarQube Formatter', () => {
   });
 
   it('can format output from no results', async () => {
-    project.setConfig({
+    await project.setConfig({
       rules: {
         'property-no-unknown': true,
       },
     });
-    project.write({
+    await project.writeJSON({
       sub: {
         'foo.css': 'a { color: red; }',
       },
@@ -42,13 +46,13 @@ describe('SonarQube Formatter', () => {
   });
 
   it('can format output when there are errors', async () => {
-    project.setConfig({
+    await project.setConfig({
       rules: {
         'property-no-unknown': true,
         'block-no-empty': true,
       },
     });
-    project.write({
+    await project.writeJSON({
       'foo.css': 'a { color: red; colir: blue; }',
       sub: {
         'bar.css': 'div {}',
@@ -63,6 +67,8 @@ describe('SonarQube Formatter', () => {
           {
             \\"engineId\\": \\"stylelint\\",
             \\"ruleId\\": \\"property-no-unknown\\",
+            \\"severity\\": \\"CRITICAL\\",
+            \\"type\\": \\"BUG\\",
             \\"primaryLocation\\": {
               \\"message\\": \\"Unexpected unknown property \\\\\\"colir\\\\\\" (property-no-unknown)\\",
               \\"filePath\\": \\"foo.css\\",
@@ -77,6 +83,8 @@ describe('SonarQube Formatter', () => {
           {
             \\"engineId\\": \\"stylelint\\",
             \\"ruleId\\": \\"block-no-empty\\",
+            \\"severity\\": \\"CRITICAL\\",
+            \\"type\\": \\"BUG\\",
             \\"primaryLocation\\": {
               \\"message\\": \\"Unexpected empty block (block-no-empty)\\",
               \\"filePath\\": \\"sub/bar.css\\",

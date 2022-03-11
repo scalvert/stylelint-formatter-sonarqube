@@ -1,21 +1,23 @@
-const path = require('path');
+import path from 'path';
+import stylelint from 'stylelint';
 
-const SONARQUBE_SEVERITY = {
-  1: 'MINOR', // warning
-  2: 'CRITICAL', // error
+const SONARQUBE_SEVERITY: Record<string, string> = {
+  warning: 'MINOR',
+  error: 'CRITICAL',
 };
 
-const SONARQUBE_TYPE = {
-  1: 'CODE_SMELL', // warning
-  2: 'BUG', // error
+const SONARQUBE_TYPE: Record<string, string> = {
+  warning: 'CODE_SMELL',
+  error: 'BUG',
 };
 
-function formatter(results) {
+const formatter = (results: stylelint.LintResult[]) => {
   const issues = [];
 
   if (Array.isArray(results) && results.length > 0) {
     for (const result of results) {
-      let relativePath = path.relative(process.cwd(), result.source);
+      let relativePath =
+        typeof result.source !== 'undefined' ? path.relative(process.cwd(), result.source) : '';
 
       for (const warning of result.warnings) {
         issues.push({
@@ -40,6 +42,7 @@ function formatter(results) {
 
   // eslint-disable-next-line unicorn/no-null
   return JSON.stringify({ issues }, null, 2);
-}
+};
 
-module.exports = formatter;
+// @ts-ignore
+export = formatter;
