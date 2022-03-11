@@ -1,6 +1,6 @@
 {
   "name": "@scalvert/stylelint-formatter-sonarqube",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A Stylelint formatter to output JSON in a format compatible with SonarQube external analyzer format",
   "keywords": [
     "stylelint",
