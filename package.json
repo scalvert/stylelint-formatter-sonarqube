@@ -17,26 +17,29 @@
   "license": "MIT",
   "author": "Steve Calvert <steve.calvert@gmail.com>",
   "type": "module",
-  "main": "index.cjs",
-  "module": "index.js",
   "exports": {
     ".": {
-      "require": "./index.cjs",
-      "default": "./index.js"
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
     }
   },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
-    "index.cjs",
-    "index.js"
+    "dist"
   ],
   "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
     "lint": "eslint .",
+    "prepublishOnly": "npm run build",
     "test": "FORCE_COLOR=1 npm-run-all lint test:*",
     "test:vitest": "vitest run"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.17.0",
-    "@scalvert/bin-tester": "^0.0.4",
+    "@scalvert/bin-tester": "^0.0.5",
     "eslint": "^8.10.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-node": "^11.1.0",
@@ -49,6 +52,8 @@
     "release-it-lerna-changelog": "^3.1.0",
     "strip-ansi": "^7.0.1",
     "stylelint": "^14.5.3",
+    "tsup": "^5.12.0",
+    "typescript": "^4.6.2",
     "vite": "^2.8.6",
     "vitest": "^0.6.0"
   },
