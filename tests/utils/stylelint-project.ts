@@ -38,18 +38,7 @@ const DEFAULT_STYLELINTRC = `
 }
 `;
 
-export default class FakeProject extends BinTesterProject {
-  static defaultSetup() {
-    let project = new this();
-
-    project.files['.stylelintrc.json'] = DEFAULT_STYLELINTRC;
-    project.files['.editorconfig'] = DEFAULT_EDITOR_CONFIG;
-
-    project.writeSync();
-
-    return project;
-  }
-
+export default class StyleLintProject extends BinTesterProject {
   constructor(name = 'fake-project', ...arguments_: any[]) {
     super(name, ...arguments_);
   }

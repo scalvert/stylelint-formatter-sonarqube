@@ -1,10 +1,10 @@
 import { fileURLToPath } from 'node:url';
 import { describe, beforeEach, afterEach, it, expect } from 'vitest';
 import { createBinTester } from '@scalvert/bin-tester';
-import Project from './utils/fake-project';
+import StyleLintProject from './utils/stylelint-project';
 
 describe('SonarQube Formatter', () => {
-  let project: Project;
+  let project: StyleLintProject;
   let { setupProject, teardownProject, runBin } = createBinTester({
     binPath: fileURLToPath(new URL('../node_modules/stylelint/bin/stylelint.js', import.meta.url)),
     staticArgs: [
@@ -12,11 +12,11 @@ describe('SonarQube Formatter', () => {
       '--custom-formatter',
       fileURLToPath(new URL('../dist/index.cjs', import.meta.url)),
     ],
-    projectConstructor: Project,
+    createProject: () => new StyleLintProject(),
   });
 
   beforeEach(async () => {
-    project = (await setupProject()) as Project;
+    project = await setupProject();
   });
 
   afterEach(() => {
