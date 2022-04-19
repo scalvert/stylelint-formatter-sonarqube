@@ -40,7 +40,7 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.17.0",
-    "@scalvert/bin-tester": "^0.3.0",
+    "@scalvert/bin-tester": "^2.0.0",
     "eslint": "^8.10.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-node": "^11.1.0",
