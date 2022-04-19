@@ -12,7 +12,7 @@ describe('SonarQube Formatter', () => {
       '--custom-formatter',
       fileURLToPath(new URL('../dist/index.cjs', import.meta.url)),
     ],
-    createProject: () => new StyleLintProject(),
+    createProject: async () => new StyleLintProject(),
   });
 
   beforeEach(async () => {
@@ -29,7 +29,7 @@ describe('SonarQube Formatter', () => {
         'property-no-unknown': true,
       },
     });
-    await project.writeJSON({
+    await project.write({
       sub: {
         'foo.css': 'a { color: red; }',
       },
@@ -52,7 +52,7 @@ describe('SonarQube Formatter', () => {
         'block-no-empty': true,
       },
     });
-    await project.writeJSON({
+    await project.write({
       'foo.css': 'a { color: red; colir: blue; }',
       sub: {
         'bar.css': 'div {}',
